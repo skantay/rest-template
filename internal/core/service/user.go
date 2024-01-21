@@ -1,10 +1,12 @@
 package service
 
 import (
+	"errors"
 	"github.com/skantay/web-1-clean/internal/core/dto"
 	"github.com/skantay/web-1-clean/internal/core/entity/error_code"
 	"github.com/skantay/web-1-clean/internal/core/model/request"
 	"github.com/skantay/web-1-clean/internal/core/model/response"
+	"github.com/skantay/web-1-clean/internal/core/port/repository"
 )
 
 const (
@@ -39,7 +41,7 @@ func (u userService) SignUp(request *request.SignUpRequest) *response.Response {
 	}
 
 	if err := u.userRepo.Insert(userDTO); err != nil {
-		if error.Is(err, repository.DuplicateUser) {
+		if errors.Is(err, repository.DuplicateUser) {
 			return u.createFailedResponse(error_code.DuplicateUser, err.Error())
 		}
 		return u.createFailedResponse(error_code.InternalError, error_code.InternalErrMsg)
