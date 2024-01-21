@@ -22,6 +22,12 @@ type userService struct {
 	userRepo repository.UserRepository
 }
 
+func NewUserService(userRepo repository.UserRepository) service.UserService {
+	return &userService{
+		userRepo: userRepo,
+	}
+}
+
 func (u userService) SignUp(request *request.SignUpRequest) *response.Response {
 	if len(request.Username) == 0 {
 		return u.createFailedResponse(error_code.InvalidRequest, invalidUserNameErrMsg)
