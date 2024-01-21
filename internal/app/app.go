@@ -3,8 +3,10 @@ package app
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/skantay/web-1-clean/internal/controller"
-	"github.com/skantay/web-1-clean/internal/core/server"
+	"github.com/skantay/web-1-clean/internal/core/config"
+	http2 "github.com/skantay/web-1-clean/internal/core/server"
 	"github.com/skantay/web-1-clean/internal/core/service"
+	infraConfig "github.com/skantay/web-1-clean/internal/infra/config"
 	"github.com/skantay/web-1-clean/internal/infra/repository"
 	"log"
 	"os"
@@ -17,7 +19,7 @@ func Run() {
 	instance.Use(gin.Recovery())
 
 	db, err := repository.NewDB(
-		config.DatabaseConfig{
+		infraConfig.DatabaseConfig{
 			Driver:                  "mysql",
 			Url:                     "user:password@tcp(127.0.0.1:3306)/your_database_name?charset=utf8mb4&parseTime=true&loc=UTC&tls=false&readTimeout=3s&writeTimeout=3s&timeout=3s&clientFoundRows=true",
 			ConnMaxLifetimeInMinute: 3,
@@ -37,12 +39,17 @@ func Run() {
 
 	userController.InitRouter()
 
-	httpServer := server.NewHttpServer(
+	httpServer := http2.NewHttpServer(
 		instance,
 		config.HttpServerConfig{
 			Port: 8000,
 		},
 	)
+
+	httpServer.Start()
+	defer func(httpServer http2.HttpServer) {
+		httpServer.Stop()
+	}(httpServer)
 
 	log.Println("listening signals...")
 	c := make(chan os.Signal, 1)
@@ -56,6 +63,4 @@ func Run() {
 	)
 	<-c
 	log.Println("graceful shutdown...")
-}
-
 }

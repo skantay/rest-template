@@ -3,6 +3,7 @@ package repository
 import (
 	"database/sql"
 	"github.com/skantay/web-1-clean/internal/core/port/repository"
+	"github.com/skantay/web-1-clean/internal/infra/config"
 	"time"
 )
 

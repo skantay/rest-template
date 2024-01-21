@@ -2,6 +2,7 @@ package service
 
 import (
 	"errors"
+	utils "github.com/skantay/web-1-clean/internal/core/common/utls"
 	"github.com/skantay/web-1-clean/internal/core/dto"
 	"github.com/skantay/web-1-clean/internal/core/entity/error_code"
 	"github.com/skantay/web-1-clean/internal/core/model/request"
@@ -22,7 +23,7 @@ type userService struct {
 	userRepo repository.UserRepository
 }
 
-func NewUserService(userRepo repository.UserRepository) service.UserService {
+func NewUserService(userRepo repository.UserRepository) UserService {
 	return &userService{
 		userRepo: userRepo,
 	}
@@ -60,8 +61,8 @@ func (u userService) SignUp(request *request.SignUpRequest) *response.Response {
 	return u.createSuccessResponse(signUpData)
 }
 
-func (u userServce) getRandomDisplayName(username stirng) string {
-	return username + utils.GetUUID()
+func (u userService) getRandomDisplayName(username string) string {
+	return username + "Random"
 }
 
 func (u userService) createFailedResponse(code error_code.ErrorCode, message string) *response.Response {
