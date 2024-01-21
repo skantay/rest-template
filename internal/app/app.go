@@ -12,6 +12,8 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+
+	_ "github.com/go-sql-driver/mysql"
 )
 
 func Run() {
@@ -21,7 +23,7 @@ func Run() {
 	db, err := repository.NewDB(
 		infraConfig.DatabaseConfig{
 			Driver:                  "mysql",
-			Url:                     "user:password@tcp(127.0.0.1:3306)/your_database_name?charset=utf8mb4&parseTime=true&loc=UTC&tls=false&readTimeout=3s&writeTimeout=3s&timeout=3s&clientFoundRows=true",
+			Url:                     "your_login:your_pass@/your_table?charset=utf8mb4&parseTime=true&loc=UTC&tls=false&readTimeout=3s&writeTimeout=3s&timeout=3s&clientFoundRows=true",
 			ConnMaxLifetimeInMinute: 3,
 			MaxOpenConns:            10,
 			MaxIdleConns:            1,
