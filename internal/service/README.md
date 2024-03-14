@@ -1,4 +1,4 @@
-# Adapter layer
+# Service layer
 
 ## Description
 
