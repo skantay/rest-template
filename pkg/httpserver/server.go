@@ -6,37 +6,25 @@ import (
 	"time"
 )
 
-const (
-	defaultReadTimeout     = 10 * time.Second
-	defaultWriteTimeout    = 10 * time.Second
-	defaultAddr            = ":80"
-	defaultIdleTimeout     = 10 * time.Second
-	defaultShutdownTimeout = 3 * time.Second
-)
-
 type Server struct {
 	server          *http.Server
 	notify          chan error
 	shutdownTimeout time.Duration
 }
 
-func New(handler http.Handler, opts ...Option) *Server {
+func New(handler http.Handler, timeout map[string]time.Duration, addr string) *Server {
 	httpServer := &http.Server{
 		Handler:      handler,
-		ReadTimeout:  defaultReadTimeout,
-		WriteTimeout: defaultWriteTimeout,
-		IdleTimeout:  defaultIdleTimeout,
-		Addr:         defaultAddr,
+		ReadTimeout:  timeout["ReadTimeout"],
+		WriteTimeout: timeout["WriteTimeout"],
+		IdleTimeout:  timeout["IdleTimeout"],
+		Addr:         addr,
 	}
 
 	s := &Server{
 		server:          httpServer,
 		notify:          make(chan error, 1),
-		shutdownTimeout: defaultShutdownTimeout,
-	}
-
-	for _, opt := range opts {
-		opt(s)
+		shutdownTimeout: timeout["shutdownTimeout"],
 	}
 
 	s.start()

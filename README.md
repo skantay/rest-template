@@ -9,7 +9,7 @@
 - instruction on how to start
 
 # Usage
-
+[ba](https://en.wikipedia.org/wiki/Brainfuck)
 - list/show available commands
 
 # Docs
